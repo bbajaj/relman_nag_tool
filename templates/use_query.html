@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+  <form action="{{url_for('use_query')}}" method="post" >
+  <ul class= queries>
+  {% for query in selected_query %}
+      <p> <h2> Channel: </h2>
+        {{ query.query_channel }} </p> 
+      <p> <h2> Name: </h2>
+        {{ query.query_name }} </p> 
+    
+        <dt><h2>Query URL:</h2>
+        <dd><textarea name=query_url rows=10 cols=55>
+        {{ query.query_url|safe }}
+        </textarea>
+  
+  
+        
+  <p><input type=submit value=Next name="Next"></p>
+   
+  </form>
+  {% else %}
+    <li><em>Unbelievable.  No Queries here so far</em>
+  {% endfor %}
+  
+  <dt><h2>Template_body:</h2>
+  <dd><textarea name=template_body rows=15 cols=55>
+        {{ template_body|safe }}
+  </ul>
+{% endblock %}
+

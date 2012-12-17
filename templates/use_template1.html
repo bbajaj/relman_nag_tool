@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+  <form action="{{url_for('use_template')}}" method="post" >
+  <ul class= list_templates>
+  {% for template in selected_template %}
+      <p> <h2> Title: </h2>
+        {{ template.template_title }} </p> 
+    
+        <dt><h2>Body:</h2>
+        <dd><textarea name=template_body rows=10 cols=55>
+        {{ template.template_body|safe }}
+        </textarea>
+  <p><input type=submit value=Next name="Next"></p>
+   
+  </form>
+  {% else %}
+    <li><em>Unbelievable.  No templates here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}
+

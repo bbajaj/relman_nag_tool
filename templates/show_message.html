@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+    <form action="{{ url_for('show_message') }}" method=post>
+      <ul class= msg >
+        <h2>Send Email ?</h2>
+        <textarea name= msg_body rows=25 cols=75>
+        {{ msg }}
+        </textarea>
+          
+  <p><input type=submit value=Send name="Send"></p>
+  <p><input type=submit value=Skip name="Skip"></p> 
+  </ul>
+    </form>
+{% endblock %}
+
+

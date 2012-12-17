@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block body %}
+	{% if 'username' in session %}
+		<p>Welcome back {{session['username']}}! </p>
+		<form action="{{url_for('index')}}" method="post">	
+			<input type="submit" name="logout" value="logout"/>
+		</form>
+		<form name="template" action="{{url_for('show_queries')}}" method="post">
+		<ul class= queries>
+		<table id="query_list" rules="rows" border="1" width="500">
+		<tbody><tr>
+		<th width="5%"><input id="checkAllTemplates" onclick="toggleTemplateCheckBoxes(this)" type="CHECKBOX"></th> 
+		<th width="95%" align="left">Template Name</th> 
+		
+		{% for query in queries %}
+		</tr><tr><td width="5%"><input value={{ query.query_id }} type="CHECKBOX" name="query_id"></td>
+		<td width="95%">{{ query.query_name }}</td>
+		
+		{% else %}
+		<li><em>Unbelievable.  No templates here so far</em>
+		{% endfor %}
+		</ul>
+		</tr>
+	
+		</tbody></table>
+		<p></p>
+		<p></p>
+		<input type="button" name="use_template" onclick="validateUse('use_template')" value="Use"/>
+		<input type="button" name="delete_template" onclick="validateDelete('delete_template')" value="Delete"/>
+		<input type="submit" name="create_template" value="Create New Template"/>
+		<input type="hidden" id="buttonclicked" name="buttonclicked">
+			
+	{% else %}
+	<p>A login is required:</p>
+	<form action="{{url_for('index')}}" method="post">
+		<p>Username:<br />
+		<input type="text" name="username" /></p>
+		<p>Password:<br />
+		<input type="password" name="passwd" /></p>
+		<p><input type="submit" value="submit" /></p>
+	</form>
+	{% endif %}
+		{% with messages = get_flashed_messages() %}
+					{% for message in messages %}
+								{{message}}
+					{% endfor %}
+		{% endwith %}
+{% endblock %}
+</form>

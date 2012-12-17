@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+    <form action="{{ url_for('edit_template') }}" method=post>
+      <ul class= selected_template>
+    {% for template in selected_template %}
+      <p> <h2> Title: </h2>
+        {{ template.template_title }} </p> 
+    
+        <dt><h2>Body:</h2>
+        <dd><textarea name=template_body rows=10 cols=55>
+        {{ template.template_body|safe }}
+        </textarea>
+          <input type="hidden" value={{ template.template_id }}  name="template_id">
+  <p><input type=submit value=Save name="Save"></p>
+   
+  </form>
+  {% else %}
+    <li><em>Unbelievable.  No templates here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}
+
+

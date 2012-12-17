@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+  {% if 'username' in session %}
+    <form action="{{ url_for('create_query') }}" method=post>
+      <dl>
+        <dt>Query Name:
+        <dd><input type=text size=30 name=query_name>
+        <dt>Query Channel:
+        <dd><input type=text size=30 name=query_channel>
+        <dt>Query URL:
+        <dd><textarea name=query_url rows=5 cols=50></textarea>
+          <br>
+        <dd><input type=submit value=Save>
+      </dl>
+    </form>
+  {% endif %}
+{% endblock %}
+

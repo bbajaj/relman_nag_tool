@@ -1,0 +1,155 @@
+/****** Skin: ******/
+
+html {overflow-y: scroll;}
+
+
+#list2, #list,#listConfig, #template_list, #query_list
+{
+background-color:#696969;
+border-collapse:collapse;
+table-layout:fixed;
+}
+
+#containerDetails 
+{
+border-collapse:collapse;
+
+}
+
+
+#list2 td, #containerDetails td,#containerDetails th,#template_list th,#template_list td,#query_list td
+{
+font-size: 13px;
+background-color:#D3D3D3 ;
+padding:1px 10px 1px 2px;
+height:25px;
+}
+#list2 th, #list th,#containerDetails th,#template_list th,#query_list th
+{
+font-size: 15px;
+text-align:left;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#3B5998;
+color:#ffffff;
+}
+
+#list2 tr, #list tr, #hostList tr,#containerDetails th,#template_list tr,#query_list tr
+{
+border-color:#000000;
+}
+
+h1,h2 {
+	font-size: 16px;
+	color: #3B5998;
+}
+
+h3 {
+font-size: 14px;
+color: #6699CC;
+}
+
+
+td {
+font-size: 13px;
+}
+
+
+#headerLeft {
+  position: relative;
+  background: top left no-repeat;
+  background-image: url(images/header-left.png);
+  padding-left: 219px;
+  height: 90px;
+  margin-bottom: 6px;
+}
+#headerRight {
+  background: top right no-repeat;
+  background-image: url(images/header-right.png);
+  padding-right: 16px;
+  height: 90px;
+}
+#header {
+  position: relative; /* Required to position #title */
+  height: 90px;
+  margin: 0;
+  padding: 0;
+  background:url(/images/header-mid.png) repeat-x;
+  min-width: 625px;
+}
+
+iframe {
+background-color:#FFFFFF ;
+}
+#listConfig td
+{
+font-size: 13px;
+background-color:C2DFFF ;
+padding:1px 5px 1px 2px;
+height:25px;
+}
+
+#listConfig tr
+{
+border-color:#FFFFFF ;
+height:50px;
+}
+
+ #listConfig th
+{
+font-size: 13px;
+text-align:left;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#A7C942;
+color:#ffffff;
+height:75px;
+}
+
+
+#containerDetails tr.alt td 
+{
+background-color:#EAF2D3;
+}
+
+
+
+#header .links {
+  float: right;
+  border: none;
+  -moz-border-radius-bottomleft: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border-radius-bottomleft: 5px;
+  border-radius-bottomright: 5px;
+  font-size: 1.2em;
+  padding: 50;
+  margin: 7px 0 0 0;
+  line-height: 1.75em;
+  white-space: nowrap;
+}
+#header .links {
+  padding-left: 16px;
+  margin: 0 6px;
+  background: no-repeat center left;
+  
+}
+#header .links {
+  padding-left: 0;
+  background: none;
+}
+#header .links {
+  position: absolute;
+  right: -10px;
+  margin-top: -1px;
+}
+#header .links a,
+#header .links a:visited {
+  color: #9000A1;
+}
+#header .links a:hover,
+#header .links a:active {
+  color: #A7C942;
+  text-decoration: underline;
+}
