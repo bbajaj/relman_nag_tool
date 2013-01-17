@@ -39,8 +39,6 @@ class PhonebookDirectory():
     def __init__(self, usr, pwd):    
         #config = json.load(open(config, 'r'))
         print "Fetching people from phonebook..."
-        print "***N",usr
-        print "****N",pwd
         try:
             self.people = json.loads(requests.get(PEOPLE_URL, auth=(usr, pwd)).content)
         except Exception, err:
