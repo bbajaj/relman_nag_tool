@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-A script for automated nagging emails listing all the bugs being tracked by certain queries
+hiA script for automated nagging emails listing all the bugs being tracked by certain queries
 These can be collated into several 'queries' through the use of multiple query files with 
 a 'query_name' param set eg: 'Bugs tracked for Firefox Beta (13)'
 Once the bugs have been collected from bugzilla they are sorted into buckets by assignee manager
@@ -13,6 +13,7 @@ import smtplib
 import time
 import subprocess
 import urllib
+import phonebook
 import tempfile
 from datetime import datetime
 from dateutil.parser import parse
@@ -64,11 +65,12 @@ def query_url_to_dict(url):
 
     return d
 
-def generateEmailOutput(queries, template, show_summary=False, show_comment=False, manager_email=None, 
+def generateEmailOutput(people, queries, template, show_summary=False, show_comment=False, manager_email=None, 
                     cc_list=None):
     template_params = {}
     toaddrs = []
-    people = flask.session['people']
+    #people = flask.session['people']
+    #people = phonebook.PhonebookDirectory(flask.session['username'],flask.session['password']);
     # stripping off the templates dir, just in case it gets passed in the args
     #template = env.get_template(template.replace('templates/', '', 1))
     print "\n in gen email\n"
@@ -123,7 +125,7 @@ def generateEmailOutput(queries, template, show_summary=False, show_comment=Fals
         + "Reply-To: %s\r\n" % REPLY_TO_EMAIL
         + "Subject: %s\r\n" % message_subject
         + "\r\n" 
-        + message_body)
+        + message_body.strip())
     toaddrs = toaddrs + cc_list
     print message
     return message
@@ -152,7 +154,8 @@ def nagEmailScript():
     print "*******In nagEmailScript", password
     print "\n\nbefore bmo"
     bmo = BMOAgent(username, password)
-    people = flask.session["people"]
+    #people = flask.session["people"]
+    people = phonebook.PhonebookDirectory(flask.session['username'],flask.session['password']);
     queries = flask.session['queries'] 
     print "\n\nafter BMO"
     # Get the buglist(s)
@@ -265,49 +268,38 @@ def nagEmailScript():
                                             print "Manager could not be found: %s" % manager_email
                                 else:
                                     print "%s's entry doesn't list a manager! Let's ask them to update phonebook." % person['name']
-                                    
-    flask.session['manual_notify'] = manual_notify
-    flask.session['managers'] = managers
-    flask.session["counter"] = counter
-    flask.session['total_bugs'] = total_bugs
+    send_msg = []
+    manual_notify_msg =''
+    for email, info in managers.items():
+        if info.has_key('nagging'):
+            print "\n\nIn nagging"
+            msg = generateEmailOutput(
+            people,
+            manager_email=email,
+            queries=info['nagging'],
+            template=flask.session['modified_template'],
+            show_summary=True,
+            show_comment=False)
+            send_msg.append(msg)
+            sent_bugs = 0
+            for query, info in info['nagging'].items():
+                sent_bugs += len(info['bugs'])
+                # take sent bugs out of manual notification list
+                for bug in info['bugs']:
+                    manual_notify.remove(bug)
+                counter = counter - sent_bugs
     
-def getMessage(lastmsg, send=False):
-    counter = flask.session["counter"]
-    managers = flask.session['managers']
-    manual_notify = flask.session['manual_notify']
-    if 'lastemail' in flask.session:
-        del managers[flask.session['lastemail']]
-    if send:
-        print "SENDING EMAIL"
-        lastinfo = flask.session["lastinfo"]
-        sendMail(lastmsg)
-        sent_bugs = 0
-        for query, info in lastinfo['nagging'].items():
-            sent_bugs += len(info['bugs'])
-            # take sent bugs out of manual notification list
-            for bug in info['bugs']:
-                manual_notify.remove(bug)
-            counter = counter - sent_bugs
-        flask.session['manual_notify'] = manual_notify
-        flask.session["counter"] = counter
-        
     
-    if managers:
-        for email, info in managers.items():
-            if info.has_key('nagging'):
-                print "\n\nIn nagging"
-                msg = generateEmailOutput(
-                manager_email=email,
-                queries=info['nagging'],
-                template=flask.session['modified_template'],
-                show_summary=True,
-                show_comment=False)
-                flask.session['managers'] = managers
-                flask.session['lastinfo'] = info
-                flask.session['lastemail'] = email
-                return False, msg
-            else:
-                del managers[email]
+  # output the manual notification list
+    manual_notify_msg += "No email generated for %s/%s bugs, you will need to manually notify the following %s bugs:\n\n" % (counter, total_bugs, len(manual_notify))
+    url = "https://bugzilla.mozilla.org/buglist.cgi?quicksearch="
+    for bug in manual_notify:
+        manual_notify_msg += "[Bug %s] -- assigned to: %s -- Last commented on: %s\n" % (bug.id, bug.assigned_to.real_name, bug.comments[-1].creation_time.replace(tzinfo=None))
+        url += "%s," % bug.id
+    manual_notify_msg += "\n\nUrl for manual notification bug list: %s \n" % url
+    return send_msg, manual_notify_msg
+
+
     
     
     if not managers:

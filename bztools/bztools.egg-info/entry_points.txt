@@ -1,0 +1,3 @@
+[console_scripts]
+bzattach = scripts.attach:main
+
