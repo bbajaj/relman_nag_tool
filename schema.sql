@@ -1,12 +1,12 @@
-drop table if exists list_templates ;
-create table list_templates (
+
+create table if not exists list_templates (
   id integer primary key autoincrement,
   template_title string not null,
   template_body string not null
 );
 
-drop table if exists queries ;
-create table queries (
+
+create table if not exists queries (
   id integer primary key autoincrement,
   query_name string not null,
   query_channel string not null,
