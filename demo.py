@@ -65,19 +65,19 @@ def teardown_request(exception):
 def get_templates():
     cur = g.db.execute('select id,template_title from list_templates order by id desc')
     list_templates = [dict(template_id=row[0],template_title=row[1]) for row in cur.fetchall()]
-    print list_templates
+    #print list_templates
     return list_templates
 
 def get_selected_template(template_id):
     cur = g.db.execute('select id,template_title,template_body from list_templates where id='+template_id)
     selected_template = [dict(template_id=row[0],template_title=row[1],template_body=row[2]) for row in cur.fetchall()]
-    print selected_template
+    #print selected_template
     return selected_template
 
 def get_selected_query(query_id):
     cur = g.db.execute('select query_name,query_channel,query_url from queries where id='+query_id)
     selected_query = [dict(query_name=row[0],query_channel=row[1],query_url=row[2]) for row in cur.fetchall()]
-    print selected_query
+    #print selected_query
     return selected_query
 
 def get_selected_queries(query_id_list):
@@ -86,26 +86,26 @@ def get_selected_queries(query_id_list):
 		cur = g.db.execute('select query_name,query_channel,query_url from queries where id='+query_id)
 		for row in cur.fetchall():
 			selected_query.append(dict(query_name=row[0],query_channel=row[1],query_url=row[2]))
-	print selected_query
+	#print selected_query
 	return selected_query
 
 def delete_template(template_id):
     cur = g.db.execute('Delete from list_templates where id='+template_id)
     g.db.commit()
     #selected_template = [dict(template_title=row[0],template_body=row[1]) for row in cur.fetchall()]
-    print cur
+    #print cur
     #return selected_template
 
 def delete_query(query_id):
     cur = g.db.execute('Delete from queries where id='+query_id)
     g.db.commit()
-    print cur
+    #print cur
     
     
 def get_queries():
     cur_query = g.db.execute('select id,query_name from queries order by id desc')
     queries = [dict(query_id=row[0],query_name=row[1]) for row in cur_query.fetchall()]
-    print queries 
+    #print queries 
     return queries 
 
 
@@ -145,8 +145,10 @@ def login_required(method):
 			else:
 				flask.flash("a login is required to view this page!")
 				return flask.redirect(flask.url_for('index'))
-		except Exception :
-			print Exception
+		except Exception:
+			flask.flash("a login is required to view this page!")
+                        return flask.redirect(flask.url_for('index'))
+			#print Exception
 	return wrapper
 	
 class Show_Templates(flask.views.MethodView):
@@ -161,8 +163,8 @@ class Show_Templates(flask.views.MethodView):
 					      #return flask.redirect(flask.url_for('show_templates'))
 		if 'buttonclicked' in flask.request.form:
 			template_id_list = flask.request.form.getlist('template_id')
-			print template_id_list
-			print "*****",flask.request.form['buttonclicked']
+		        #print template_id_list
+			#print "*****",flask.request.form['buttonclicked']
 			if flask.request.form['buttonclicked'] == 'use_template' :
 				numids = len(template_id_list)
 				if  numids != 1:
@@ -186,7 +188,7 @@ class Use_Template(flask.views.MethodView):
 	@login_required
 	def get(self):
 		template_id = request.args.get('id')
-		print template_id
+		#print template_id
 		#app.logger.debug("DEBUG: Exception in getting phonebook: %s" % Exception.message)
 		app.logger.debug("DEBUG: Template id: %s" % template_id)
 		
@@ -196,11 +198,11 @@ class Use_Template(flask.views.MethodView):
 	def post(self):
 		#flask.flash("Not implemented")
 		if 'Next' in flask.request.form:
-			print "***Next\n"
+			#print "***Next\n"
 			#return flask.redirect(flask.url_for('use_template'))
-			print "***Next\n"
+			#print "***Next\n"
 			flask.session['modified_template'] = flask.request.form['template_body']
-			print flask.session['modified_template']
+			#print flask.session['modified_template']
 			return flask.redirect(flask.url_for('show_queries'))
 					      #return flask.redirect(flask.url_for('show_templates'))
 					      
@@ -209,12 +211,12 @@ class Use_Query(flask.views.MethodView):
 	def get(self):
 		
 		query_id_list = request.args.getlist('idlist')
-		#print query_id_list+"list"
-		print "***Useget******\n"
-		print flask.session['modified_template']
+		##print query_id_list+"list"
+		#print "***Useget******\n"
+		#print flask.session['modified_template']
 		flask.session['queries'] = get_selected_queries(query_id_list)
-		print "\nprinting from session\n"
-		print flask.session['queries']
+		#print "\n#printing from session\n"
+		#print flask.session['queries']
 		return flask.redirect(flask.url_for('show_message'))
 
 	
@@ -222,9 +224,9 @@ class Use_Query(flask.views.MethodView):
 	def post(self):
 		#flask.flash("Not implemented")
 		#if 'use_query' in flask.request.form:
-			print "***Use\n"
+			#print "***Use\n"
 			#return flask.redirect(flask.url_for('use_template'))
-			print modified_template
+			#print modified_template
 			return flask.redirect(flask.url_for('show_queries'))
 					      #return flask.redirect(flask.url_for('show_templates'))
 					      
@@ -232,7 +234,7 @@ class Delete_Template(flask.views.MethodView):
 	@login_required
 	def get(self):
 		template_id_list = request.args.getlist('idlist')
-		print template_id_list
+		#print template_id_list
 		for template_id in template_id_list:
 			delete_template(template_id)
 		return flask.redirect(flask.url_for('show_templates'))
@@ -248,7 +250,7 @@ class Delete_Query(flask.views.MethodView):
 	@login_required
 	def get(self):
 		query_id_list = request.args.getlist('idlist')
-		print query_id_list
+		#print query_id_list
 		for query_id in query_id_list:
 			delete_query(query_id)
 		return flask.redirect(flask.url_for('show_queries'))
@@ -263,12 +265,12 @@ class Delete_Query(flask.views.MethodView):
 class Create_Template(flask.views.MethodView):
 	@login_required
 	def get(self):
-		print "\n in ****** create template"
+		#print "\n in ****** create template"
 		return flask.render_template('create_template.html')
 	
 	@login_required
 	def post(self):
-		print "\n in ****** create template"
+		#print "\n in ****** create template"
 		g.db.execute('insert into list_templates (template_title, template_body) values (?, ?)',[request.form['template_title'], request.form['template_body']])
 		g.db.commit()
 		flask.flash('New entry was successfully posted')
@@ -277,12 +279,12 @@ class Create_Template(flask.views.MethodView):
 class Create_Query(flask.views.MethodView):
 	@login_required
 	def get(self):
-		print "\n in ****** create query"
+		#print "\n in ****** create query"
 		return flask.render_template('create_query.html')
 	
 	@login_required
 	def post(self):
-		print "\n in ****** create query"
+		#print "\n in ****** create query"
 		g.db.execute('insert into queries (query_name, query_channel, query_url) values (?, ?, ?)',[request.form['query_name'], request.form['query_channel'], request.form['query_url']])
 		g.db.commit()
 		flask.flash('New entry was successfully posted')
@@ -299,8 +301,8 @@ class Show_Queries(flask.views.MethodView):
 			return flask.redirect(flask.url_for('create_query'))
 		if 'querybuttonclicked' in flask.request.form:
 			query_id_list = flask.request.form.getlist('query_id')
-			print query_id_list
-			print "*****",flask.request.form['querybuttonclicked']
+			#print query_id_list
+			#print "*****",flask.request.form['querybuttonclicked']
 			if flask.request.form['querybuttonclicked'] == 'use_query' :
 				
 				return flask.redirect(flask.url_for('use_query',idlist=query_id_list))
@@ -316,7 +318,7 @@ class Edit_Template(flask.views.MethodView):
 	@login_required
 	def get(self):
 		template_id = request.args.get('id')
-		print template_id
+		#print template_id
 		return flask.render_template('edit_template.html',selected_template = get_selected_template(template_id))
 		
 	
@@ -325,10 +327,10 @@ class Edit_Template(flask.views.MethodView):
 		if 'Save' in flask.request.form:
 			template_id = request.form['template_id']
 			modified_template_body = request.form['template_body']
-			print "\najjsj\n"
+			#print "\najjsj\n"
 			Test.test_session_variable()
-			print modified_template_body
-			print template_id
+			#print modified_template_body
+			#print template_id
 			
 			g.db.execute('update list_templates SET template_body=\"'+modified_template_body+'\" where id='+template_id)
 			g.db.commit()
@@ -340,9 +342,9 @@ class Show_Message(flask.views.MethodView):
 	def get(self):
 		try :
 		    send_msg, manual_notify_msg = email_nag.nagEmailScript()
-		    print "MESSAGES:\n"
-		    for msg in send_msg:
-			print msg, "\n"
+		    #print "MESSAGES:\n"
+		    #for msg in send_msg:
+		    #print msg, "\n"
 		    return flask.render_template('show_message.html', send_msg = send_msg, manual_notify = manual_notify_msg)
 		except Exception,e:
 		    #return flask.redirect(flask.url_for('show_message'))
@@ -354,10 +356,10 @@ class Show_Message(flask.views.MethodView):
 	def post(self):
 		msg_id_list = flask.request.form.getlist('messageid')
 		for msgid in msg_id_list:
-		    print msgid,"\n\n"
-		    print flask.request.form[msgid]
+		    #print msgid,"\n\n"
+		    #print flask.request.form[msgid]
 		    email_nag.sendMail(flask.request.form[msgid])
-		print "\n\n", flask.request.form['manual_notify']
+		#print "\n\n", flask.request.form['manual_notify']
 		manual_notify= flask.request.form['manual_notify']
 		return flask.render_template('manual_notify.html',manual_notify = manual_notify )
 		
