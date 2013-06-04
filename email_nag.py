@@ -53,17 +53,24 @@ def get_last_assignee_comment(comments, person):
                 # print "Found last assignee (%s) comment on bug. %s" % (comment.creator.real_name, comment.creation_time.replace(tzinfo=None))
                 return comment.creation_time.replace(tzinfo=None)
     return None
-
-def query_url_to_dict(url):
-    fields_and_values = url.split("?")[1].split(";")
-    d = {}
+#
+# Dictionary cannot hold same keys with multiple value
+# so using list -> tuple and encoding with urllib.urlencode
+# which can be safely appended to base url path to get openable
+# full URL path. See get_bug_list in agents.py
+def query_url_to_urlencoded(url):
+    print "in query url\n"
+    fields_and_values = url.split("?")[1].split("&")
+    d = []
 
     for pair in fields_and_values:
         (key,val) = pair.split("=")
+        print key, ":", val ,"\n"
         if key != "list_id":
-            d[key]=urllib.unquote(val)
-
-    return d
+            #d[key]=urllib.unquote(val)
+            d.append((key, urllib.unquote(val)))
+    print "dict ", d
+    return urllib.urlencode(tuple(d))
 
 def generateEmailOutput(people, queries, template, show_summary=False, show_comment=False, manager_email=None, 
                     cc_list=None):
@@ -153,7 +160,9 @@ def nagEmailScript():
     password = flask.session['password']
     print "*******In nagEmailScript", password
     print "\n\nbefore bmo"
+    
     bmo = BMOAgent(username, password)
+    bmo.check_login("https://bugzilla.mozilla.org/show_bug.cgi?id=12");
     #people = flask.session["people"]
     people = phonebook.PhonebookDirectory(flask.session['username'],flask.session['password']);
     queries = flask.session['queries'] 
@@ -177,7 +186,8 @@ def nagEmailScript():
             collected_queries[query_name]['bugs'] = bmo.get_bug_list(query['query_params'])
         elif query.has_key('query_url'):
             print "Gathering bugs from query_url in %s" % query
-            collected_queries[query_name]['bugs'] = bmo.get_bug_list(query_url_to_dict(query['query_url'])) 
+            collected_queries[query_name]['bugs'] = bmo.get_bug_list(query_url_to_urlencoded(query['query_url']))
+            print "gathered$$$$$$$$$$$"
         else:
             raise Exception("Error - no valid query params or url in the config file")
             
@@ -235,8 +245,10 @@ def nagEmailScript():
                     assignee = None
                 # TODO - get rid of this, SUCH A HACK!
                 elif 'general@js.bugs' in assignee:
+                    #dmandelin is no longer with the firm so this is changed yo naveed
+                    #Note to self do perform error handling in add_to_managers
                     print "No one assigned to JS bug: %s, adding to dmandelin's list..." % bug.id
-                    add_to_managers('dmandelin@mozilla.com', query)
+                    add_to_managers('nihsanullah@mozilla.com', query)
                 else:
                     if bug.assigned_to.real_name != None:
                         if person != None:

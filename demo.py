@@ -4,6 +4,7 @@ import functools
 import phonebook
 import Test
 import email_nag
+import logging, logging.handlers
 
 # all the imports
 import sqlite3
@@ -31,12 +32,21 @@ app = flask.Flask(__name__)
 app.secret_key = "iphone"
 app.config['DEBUG'] = True
 DATABASE = '/tmp/flaskr.db'
+LOGFILE = 'relman_nag.log'
 DEBUG = True
 app.config.from_object(__name__)
 app.config['PROPAGATE_EXCEPTIONS'] = True
+
+
 #db = SQLAlchemy(app)
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
+
+#### LOGGING 
+format = logging.Formatter(fmt="%(asctime)s-%(levelname)s-%(funcName)s: %(message)s")
+handler = logging.handlers.RotatingFileHandler(LOGFILE, maxBytes=50000, backupCount=5)
+handler.setFormatter(format)
+app.logger.addHandler(handler)
 
 def init_db():
     with closing(connect_db()) as db:
@@ -177,6 +187,9 @@ class Use_Template(flask.views.MethodView):
 	def get(self):
 		template_id = request.args.get('id')
 		print template_id
+		#app.logger.debug("DEBUG: Exception in getting phonebook: %s" % Exception.message)
+		app.logger.debug("DEBUG: Template id: %s" % template_id)
+		
 		return flask.render_template('use_template.html',selected_template = get_selected_template(template_id))
 	
 	@login_required
@@ -331,8 +344,11 @@ class Show_Message(flask.views.MethodView):
 		    for msg in send_msg:
 			print msg, "\n"
 		    return flask.render_template('show_message.html', send_msg = send_msg, manual_notify = manual_notify_msg)
-		except Exception:
-		    return flask.redirect(flask.url_for('show_message'))
+		except Exception,e:
+		    #return flask.redirect(flask.url_for('show_message'))
+		    print '\nlogin error:\n', e
+		    print '\n'
+		    
 		    
 	@login_required
 	def post(self):
@@ -349,7 +365,9 @@ class Show_Message(flask.views.MethodView):
 		
 		
 
-app.add_url_rule('/relman_nag',view_func=Main.as_view('index'), methods=['GET','POST'])
+app.add_url_rule('/',view_func=Main.as_view('index'), methods=['GET','POST'])
+#app.add_url_rule('/'relman_nag,view_func=Main.as_view('index'), methods=['GET','POST'])
+#app.add_url_rule('/relman_nag',view_func=Main.as_view('login'), methods=['GET','POST'])
 app.add_url_rule('/show_templates', view_func=Show_Templates.as_view('show_templates'), methods=['GET','POST'])
 app.add_url_rule('/create_template', view_func=Create_Template.as_view('create_template'), methods=['GET','POST'])
 app.add_url_rule('/use_template', view_func=Use_Template.as_view('use_template'), methods=['GET','POST'])

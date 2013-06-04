@@ -1,5 +1,6 @@
 from bugzilla.models import *
 from bugzilla.utils import *
+import urllib
 
 class InvalidAPI_ROOT(Exception):
     def __str__(self):
@@ -25,9 +26,19 @@ class BugzillaAgent(object):
         url = urljoin(self.API_ROOT, 'bug/%s?%s' % (bug, self.qs(**params)))
         return Bug.get(url)
 
-    def get_bug_list(self, params={}):
-        url = url = urljoin(self.API_ROOT, 'bug/?%s' % (self.qs(**params)))
+    def get_bug_list(self, params):
+        print "in get_bug_list  agents.py"
+        # params is alreay encoded so just append it to ROOT
+        url = urljoin(self.API_ROOT, 'bug/?%s' % params)
+        print "\n\nURL formed = :", url, "\n\n"
         return BugSearch.get(url).bugs
+    
+    def check_login(self, params):
+        url = urljoin(self.API_ROOT, 'bug/?%s&id=12&' % params)
+        print url
+        return
+       
+      
 
     def qs(self, **params):
         if self.username and self.password:
