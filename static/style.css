@@ -2,6 +2,23 @@
 
 html {overflow-y: scroll;}
 
+header {
+	background: #AAAAAA;
+	text-align: right;
+	padding: 20px;
+}
+
+header input[type="submit"] {
+	background: white;
+	color: black;
+	border-style: hidden;
+	border-radius: 5px;
+	padding: 3px;
+}
+
+.actions input[type="submit"] {
+}
+
 
 #list2, #list,#listConfig, #template_list, #query_list
 {
@@ -20,6 +37,7 @@ border-collapse:collapse;
 #list2 td, #containerDetails td,#containerDetails th,#template_list th,#template_list td,#query_list td
 {
 font-size: 13px;
+font: 1em Arial, Helvetica, sans-serif;
 background-color:#D3D3D3 ;
 padding:1px 10px 1px 2px;
 height:25px;
@@ -27,6 +45,7 @@ height:25px;
 #list2 th, #list th,#containerDetails th,#template_list th,#query_list th
 {
 font-size: 15px;
+font: 1em Arial, Helvetica, sans-serif;
 text-align:left;
 padding-top:5px;
 padding-bottom:4px;
@@ -37,21 +56,25 @@ color:#ffffff;
 #list2 tr, #list tr, #hostList tr,#containerDetails th,#template_list tr,#query_list tr
 {
 border-color:#000000;
+border-radius: 5px;
 }
 
 h1,h2 {
 	font-size: 16px;
 	color: #3B5998;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 h3 {
 font-size: 14px;
+font: Arial, Helvetica, sans-serif;
 color: #6699CC;
 }
 
 
 td {
 font-size: 13px;
+font: Arial, Helvetica, sans-serif;
 }
 
 
@@ -84,6 +107,7 @@ background-color:#FFFFFF ;
 #listConfig td
 {
 font-size: 13px;
+font: Arial, Helvetica, sans-serif;
 background-color:C2DFFF ;
 padding:1px 5px 1px 2px;
 height:25px;
@@ -98,6 +122,7 @@ height:50px;
  #listConfig th
 {
 font-size: 13px;
+font: Arial, Helvetica, sans-serif;
 text-align:left;
 padding-top:5px;
 padding-bottom:4px;
@@ -124,6 +149,7 @@ background-color:#EAF2D3;
   border-radius-bottomleft: 5px;
   border-radius-bottomright: 5px;
   font-size: 1.2em;
+  font: Arial, Helvetica, sans-serif;
   padding: 50;
   margin: 7px 0 0 0;
   line-height: 1.75em;

@@ -29,6 +29,7 @@ app = flask.Flask(__name__)
 
 
 # configuration
+
 app.secret_key = "iphone"
 app.config['DEBUG'] = True
 DATABASE = '/tmp/flaskr.db'
@@ -235,6 +236,7 @@ class Delete_Template(flask.views.MethodView):
 	def get(self):
 		template_id_list = request.args.getlist('idlist')
 		#print template_id_list
+		app.logger.debug("DEBUG: In Delete_Template and template_id_list: %s" % template_id_list)
 		for template_id in template_id_list:
 			delete_template(template_id)
 		return flask.redirect(flask.url_for('show_templates'))
@@ -328,10 +330,7 @@ class Edit_Template(flask.views.MethodView):
 			template_id = request.form['template_id']
 			modified_template_body = request.form['template_body']
 			#print "\najjsj\n"
-			Test.test_session_variable()
-			#print modified_template_body
-			#print template_id
-			
+			#Test.test_session_variable()
 			g.db.execute('update list_templates SET template_body=\"'+modified_template_body+'\" where id='+template_id)
 			g.db.commit()
 			flask.flash('New entry was successfully saved')

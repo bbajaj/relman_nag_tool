@@ -3,10 +3,12 @@
 {% block body %}
 	
 	{% if 'username' in session %}
-		<p>Welcome back {{session['username']}}! </p>
-		<form action="{{url_for('index')}}" method="post">	
-			<input type="submit" name="logout" value="logout"/>
-		</form>
+		<header>
+			<form action="{{url_for('index')}}" method="post">
+					Welcome back {{session['username']}}!
+					<input type="submit" name="logout" value="logout"/>
+			</form>
+		</header>
 		<form name="template" action="{{url_for('show_templates')}}" method="post">
 		<ul class= list_templates>
 		<table id="template_list" rules="rows" border="1" width="400" >
@@ -28,11 +30,13 @@
 		<table>
 		<p></p>
 		<p></p>
+		<div class="actions">
 		<input type="button" name="use_template" onclick="validateUse('use_template')" value="Use"/>
 		<input type="button" name="delete_template" onclick="validateDelete('delete_template')" value="Delete"/>
 		<input type="button" name="edit_template" onclick="validateEdit('edit_template')" value="Edit"/>
 		<input type="submit" name="create_template" value="Create New Template"/>
 		<input type="hidden" id="buttonclicked" name="buttonclicked">
+			</div>
 			</table>
 		</form>	
 	{% else %}
