@@ -329,9 +329,10 @@ class Edit_Template(flask.views.MethodView):
 		if 'Save' in flask.request.form:
 			template_id = request.form['template_id']
 			modified_template_body = request.form['template_body']
+			modified_template_title = request.form['template_title']
 			#print "\najjsj\n"
 			#Test.test_session_variable()
-			g.db.execute('update list_templates SET template_body=\"'+modified_template_body+'\" where id='+template_id)
+			g.db.execute('update list_templates SET template_body=\"'+modified_template_body+'\",template_title=\"'+modified_template_title+'\" where id='+template_id)
 			g.db.commit()
 			flask.flash('New entry was successfully saved')
 			return flask.redirect(flask.url_for('show_templates'))

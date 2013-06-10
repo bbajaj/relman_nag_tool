@@ -9,36 +9,46 @@
 					<input type="submit" name="logout" value="logout"/>
 			</form>
 		</header>
+		
 		<form name="template" action="{{url_for('show_templates')}}" method="post">
-		<ul class= list_templates>
-		<table id="template_list" rules="rows" border="1" width="400" >
-		<tbody><tr>
-		<th width="5%"><input id="checkAllTemplates" onclick="toggleTemplateCheckBoxes(this)" type="CHECKBOX"></th> 
-		<th width="95%" align="left">Template Name</th> 
-		
-		{% for template in list_templates %}
-		</tr><tr><td width="5%"><input value={{ template.template_id }} type="CHECKBOX" name="template_id" ></td>
-		<td width="95%">{{ template.template_title }}</td>
-		
-		{% else %}
-		<li><em>Unbelievable.  No templates here so far</em>
-		{% endfor %}
-		</ul>
-		</tr>
-	
-		</tbody></table>
-		<table>
-		<p></p>
-		<p></p>
-		<div class="actions">
-		<input type="button" name="use_template" onclick="validateUse('use_template')" value="Use"/>
-		<input type="button" name="delete_template" onclick="validateDelete('delete_template')" value="Delete"/>
-		<input type="button" name="edit_template" onclick="validateEdit('edit_template')" value="Edit"/>
-		<input type="submit" name="create_template" value="Create New Template"/>
-		<input type="hidden" id="buttonclicked" name="buttonclicked">
-			</div>
+			
+		<div class="wrapper">	
+			<table id="template_list" rules="rows" border="1" width="400" >
+			<tbody>
+				<tr class="title">
+					<th width="5%"><input id="checkAllTemplates" onclick="toggleTemplateCheckBoxes(this)" type="CHECKBOX"></th> 
+					<th width="95%" align="left">Template Name</th> 
+					{% for template in list_templates %}
+					</tr><tr>
+					<td width="5%"><input value={{ template.template_id }} type="CHECKBOX" name="template_id" ></td>
+					<td width="95%">{{ template.template_title }}</td>
+					{% else %}
+					<tr>Unbelievable. No templates here so far</tr>
+					{% endfor %}
+				</tr>
+			</tbody>
 			</table>
-		</form>	
+		</div>
+	
+		<ul class="actions">
+			<li>
+				<input type="button" name="use_template" onclick="validateUse('use_template')" value="Use"/>
+			</li>
+			<li>
+				<input type="button" name="delete_template" onclick="validateDelete('delete_template')" value="Delete"/>
+			</li>
+			<li>
+				<input type="button" name="edit_template" onclick="validateEdit('edit_template')" value="Edit"/>
+			</li>
+			<li>
+				<input type="submit" name="create_template" value="Create New Template"/>
+			</li>
+			<li>
+				<input type="hidden" id="buttonclicked" name="buttonclicked">
+			</li>
+			
+		</ul>
+		
 	{% else %}
 	<p>A login is required:</p>
 	<form action="{{url_for('index')}}" method="post">

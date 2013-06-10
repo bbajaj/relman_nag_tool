@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 {% block body %}
+  <div class="wrapper use-template">
   {% if 'username' in session %}
     <form action="{{ url_for('create_template') }}" method=post>
-      <dl>
-        <dt>Title:
-        <dd><input type=text size=30 name=template_title>
-        <dt>Text:
+      
+         <p> <h3>Template Title:</h3>
+        <dd><input type=text size=30 name=template_title></dd>
+        
+        <p> <h3>Template Body:</h3>
         <dd><textarea name=template_body rows=20 cols=60></textarea>
-          <br>
-        <dd><input type=submit value=Save>
+          
+            <ul class="actions use-template">
+              <li>
+                  <dd><input type=submit value=Save>
+              </li>
       </dl>
     </form>
   {% endif %}
+  </div>
 {% endblock %}
 
