@@ -1,21 +1,27 @@
 {% extends "base.html" %}
 {% block body %}
+    <div class="wrapper use-template">
   <form action="{{url_for('use_template')}}" method="post" >
-  <ul class= list_templates>
+  <ul class="list_templates">
   {% for template in selected_template %}
-      <p> <h2> Title: 
-        {{ template.template_title }} </p> </h2>
+      <p> <h3> Template Title :
+        {{ template.template_title }} </p> </h3>
     
-        <dt><h2>Body:</h2>
-        <dd><textarea name=template_body rows=15 cols=60>
+        <dt><h3>Template Body </h3>
+         <dd><textarea name=template_body rows=15 cols=60></dd>  
         {{ template.template_body|safe }}
         </textarea>
-  <p><input type=submit value=Next name="Next"></p>
+            <ul class="actions use-template">
+                <li>
+                <p><input type=submit value=Next name="Next"></p>
+                </li>
+            </ul>
    
   </form>
   {% else %}
-    <li><em>Unbelievable.  No templates here so far</em>
+    <li><em>Unbelievable.No templates here so far</em>
   {% endfor %}
   </ul>
+  </div>
 {% endblock %}
 

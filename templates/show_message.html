@@ -2,9 +2,9 @@
 {% block body %}
     <form action="{{ url_for('show_message') }}" method=post>
       <ul class= send_msg >
-        <h2>Send Email ?</h2>
+        <h2>Select checkbox to send Email </h2>
         <table border="1">
-          <th>Skip</th>
+          <th>Send ? </th>
           <th>Message</th>
         {% for msg in send_msg %}
         <tr>
