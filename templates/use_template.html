@@ -7,9 +7,9 @@
       <p> <h3> Template Title :
         {{ template.template_title }} </p> </h3>
     
-        <dt><h3>Template Body </h3>
-         <dd><textarea name=template_body rows=15 cols=60></dd>  
-        {{ template.template_body|safe }}
+        <h3>Template Body </h3>
+         <textarea name=template_body rows=15 cols=60>
+                 {{ template.template_body|safe }}
         </textarea>
             <ul class="actions use-template">
                 <li>
