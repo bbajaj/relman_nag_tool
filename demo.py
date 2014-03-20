@@ -32,7 +32,7 @@ app = flask.Flask(__name__)
 
 app.secret_key = "iphone"
 app.config['DEBUG'] = True
-DATABASE = '/tmp/flaskr.db'
+DATABASE = app.root_path + '/db/flaskr.db'
 LOGFILE = 'relman_nag.log'
 DEBUG = True
 app.config.from_object(__name__)
@@ -41,7 +41,7 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 #db = SQLAlchemy(app)
 def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
+	return sqlite3.connect(app.config['DATABASE'])
 
 #### LOGGING 
 format = logging.Formatter(fmt="%(asctime)s-%(levelname)s-%(funcName)s: %(message)s")
@@ -140,12 +140,12 @@ def login_required(method):
 	@functools.wraps(method)
 	def wrapper(*args, **kwargs):
 		try:
-			
 			if 'username' in flask.session:
 				return method(*args, **kwargs)
 			else:
 				flask.flash("a login is required to view this page!")
 				return flask.redirect(flask.url_for('index'))
+		
 		except Exception:
 			flask.flash("a login is required to view this page!")
                         return flask.redirect(flask.url_for('index'))
