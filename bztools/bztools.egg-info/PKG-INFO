@@ -1,4 +1,4 @@
-Metadata-Version: 1.0
+Metadata-Version: 1.1
 Name: bztools
 Version: 0.0.1
 Summary: Models and scripts to access the Bugzilla REST API.
