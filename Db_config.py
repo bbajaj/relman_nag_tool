@@ -4,7 +4,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
 # configuration
-DATABASE = '/tmp/flaskr.db'
+DATABASE = flask.Flask(__name__).root_path + '/db/flaskr.db'
 DEBUG = True
 SECRET_KEY = 'iphone'
 USERNAME = 'admin'
