@@ -12,7 +12,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 from contextlib import closing
 #from simplekv.memory import DictStore
-#from flaskext.kvsession import KVSessionExtension 
+#from flaskext.kvsession import KVSessionExtension
 
 # a DictStore will store everything in memory
 # other stores are more useful, like the FilesystemStore, see the simplekv
