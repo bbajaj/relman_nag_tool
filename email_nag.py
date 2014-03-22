@@ -83,7 +83,7 @@ def generateEmailOutput(people, queries, template, show_summary=False, show_comm
     #people = phonebook.PhonebookDirectory(flask.session['username'],flask.session['password']);
     # stripping off the templates dir, just in case it gets passed in the args
     #template = env.get_template(template.replace('templates/', '', 1))
-    print "Generating email now\n"
+    print "Generating email now..."
     t = Template(template)
     message_body = t.render(queries=template_params, show_summary=show_summary, show_comment=show_comment)
     
@@ -109,7 +109,7 @@ def generateEmailOutput(people, queries, template, show_summary=False, show_comm
                 person = dict(people.people_by_bzmail[manager_email])
                 if person['mozillaMail'] not in toaddrs:
                     toaddrs.append(person['mozillaMail'])
-    
+    print 'To: ', toaddrs
     message_body = t.render(queries=template_params, show_summary=show_summary, show_comment=show_comment)
     # is our only email to a manager? then only cc the REPLY_TO_EMAIL
     manager = dict(people.people[manager_email])
@@ -129,6 +129,7 @@ def generateEmailOutput(people, queries, template, show_summary=False, show_comm
         for email in toaddrs:
             if email in cc_list:
                 toaddrs.remove(email)
+    print 'Cc: ', cc_list
     message_subject = EMAIL_SUBJECT
     message = ("From: %s\r\n" % REPLY_TO_EMAIL
         + "To: %s\r\n" % ",".join(toaddrs)
