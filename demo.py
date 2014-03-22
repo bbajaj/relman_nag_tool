@@ -342,14 +342,9 @@ class Show_Message(flask.views.MethodView):
 	def get(self):
 		try :
 		    send_msg, manual_notify_msg = email_nag.nagEmailScript()
-		    #print "MESSAGES:\n"
-		    #for msg in send_msg:
-		    #print msg, "\n"
 		    return flask.render_template('show_message.html', send_msg = send_msg, manual_notify = manual_notify_msg)
 		except Exception,e:
-		    #return flask.redirect(flask.url_for('show_message'))
 		    print '\nlogin error:\n', e
-		    print '\n'
 		    
 		    
 	@login_required

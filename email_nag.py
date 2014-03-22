@@ -15,6 +15,9 @@ import subprocess
 import urllib
 import phonebook
 import tempfile
+import urllib2
+import simplejson
+import re
 from datetime import datetime
 from dateutil.parser import parse
 from argparse import ArgumentParser
@@ -80,34 +83,35 @@ def generateEmailOutput(people, queries, template, show_summary=False, show_comm
     #people = phonebook.PhonebookDirectory(flask.session['username'],flask.session['password']);
     # stripping off the templates dir, just in case it gets passed in the args
     #template = env.get_template(template.replace('templates/', '', 1))
-    print "\n in gen email\n"
+    print "Generating email now\n"
     t = Template(template)
     message_body = t.render(queries=template_params, show_summary=show_summary, show_comment=show_comment)
     
-    print "\n message body",message_body
-
     for query,results in queries.items():
         template_params[query] = {'buglist': []}
         for bug in results['bugs']:
-            print "\n\n bug ", bug
             template_params[query]['buglist'].append({
                     'id':bug.id,
                     'summary':bug.summary,
                     #'comment': bug.comments[-1].creation_time.replace(tzinfo=None),
                     'assignee': bug.assigned_to.real_name
             })
-            print "\n\ntemp params",template_params
             # more hacking for JS special casing
             if bug.assigned_to.name == 'general@js.bugs' and 'dmandelin@mozilla.com' not in toaddrs:
                 toaddrs.append('dmandelin@mozilla.com')
+            
             if people.people_by_bzmail.has_key(bug.assigned_to.name):
                 person = dict(people.people_by_bzmail[bug.assigned_to.name])
                 if person['mozillaMail'] not in toaddrs:
                     toaddrs.append(person['mozillaMail'])
-    print "\nafter itr\n"     
+            
+            elif people.people_by_bzmail.has_key(manager_email):
+                person = dict(people.people_by_bzmail[manager_email])
+                if person['mozillaMail'] not in toaddrs:
+                    toaddrs.append(person['mozillaMail'])
+    
     message_body = t.render(queries=template_params, show_summary=show_summary, show_comment=show_comment)
     # is our only email to a manager? then only cc the REPLY_TO_EMAIL
-    print message_body
     manager = dict(people.people[manager_email])
     if len(toaddrs) == 1 and toaddrs[0] == manager_email or toaddrs[0] == manager.get('bugzillaMail'):
         if toaddrs[0] == 'dmandelin@mozilla.com':
@@ -134,7 +138,6 @@ def generateEmailOutput(people, queries, template, show_summary=False, show_comm
         + "\r\n" 
         + message_body.strip())
     toaddrs = toaddrs + cc_list
-    print message
     return message
 
 
@@ -163,7 +166,6 @@ def nagEmailScript():
     
     bmo = BMOAgent(username, password)
     bmo.check_login("https://bugzilla.mozilla.org/show_bug.cgi?id=12");
-    #people = flask.session["people"]
     people = phonebook.PhonebookDirectory(flask.session['username'],flask.session['password']);
     queries = flask.session['queries'] 
     print "\n\nafter BMO"
@@ -201,7 +203,6 @@ def nagEmailScript():
     managers = people.managers
     manual_notify = []
     counter = 0
-    print "\najajajakakka"
     
     def add_to_managers(manager_email, query):
         if managers[manager_email].has_key('nagging'):
@@ -220,8 +221,6 @@ def nagEmailScript():
   
     verbose = False
     for query in collected_queries.keys():
-        print "\nBNBNBNNBN\n"
-        
         for b in collected_queries[query]['bugs']:
             if verbose:
                 print "\nb::::",b
@@ -242,7 +241,38 @@ def nagEmailScript():
                 if verbose:
                     print "\nYYYYYYYYYYYYYYYYYYYYY219\n"
                 if 'nobody' in assignee:
-                    assignee = None
+                    #getting the list of owners externally from Andreas's dashboard 
+                    owners_js = urllib2.urlopen("http://andreasgal.github.io/dashboard/owners.js").read(10000)
+                    
+                    #formatting that js file that declares a variable into a json-ish string
+                    owners_js = owners_js.split('{')
+                    owners_js = "{" + owners_js[1]
+                    owners_js = owners_js.split(';')
+                    owners_js = owners_js[0]
+
+                    #get rid of comments in the json file, run until all comments are gone
+                    while owners_js.find('//') > 0 or owners_js.find('/*') > 0 :
+                        owners_js = re.sub('//.*?\n|/\*.*?\*/', '\n', owners_js, re.S)
+                    
+                    #removing trailing comma
+                    owners_js = re.sub('{', '', owners_js)
+                    owners_js = re.sub('}', '', owners_js)
+                    owners_js = owners_js.strip(' \t\n\r')
+                    owners_js = owners_js.strip(',')
+                    owners_js = '{\n' + owners_js + '\n}'
+                    
+                    #search for email of the responsible component owner
+                    owners_js = simplejson.loads(owners_js)
+                    if ( owners_js.has_key(bug.component) ):
+                        component_manager_name = owners_js[bug.component]
+                        component_manager = people.people_by_name[component_manager_name]
+                        if component_manager['bugzillaEmail'] != None:
+                            add_to_managers(component_manager['bugzillaEmail'], query)
+                        else:
+                            assignee = None
+                    else:
+                        assignee = None
+
                 # TODO - get rid of this, SUCH A HACK!
                 elif 'general@js.bugs' in assignee:
                     #dmandelin is no longer with the firm so this is changed yo naveed
@@ -305,10 +335,12 @@ def nagEmailScript():
   # output the manual notification list
     manual_notify_msg += "No email generated for %s/%s bugs, you will need to manually notify the following %s bugs:\n\n" % (counter, total_bugs, len(manual_notify))
     url = "https://bugzilla.mozilla.org/buglist.cgi?quicksearch="
+    
     for bug in manual_notify:
         manual_notify_msg += "[Bug %s] -- assigned to: %s -- Last commented on: %s\n" % (bug.id, bug.assigned_to.real_name, bug.comments[-1].creation_time.replace(tzinfo=None))
         url += "%s," % bug.id
     manual_notify_msg += "\n\nUrl for manual notification bug list: %s \n" % url
+    #print send_msg
     return send_msg, manual_notify_msg
 
 
