@@ -47,6 +47,7 @@ class PhonebookDirectory():
                 raise 
         #print Exception
         self.people_by_bzmail = self.get_people_by_bzmail()
+        self.people_by_name = self.get_people_by_name()
         self.managers = self.get_managers()
         self.vices = self.get_vices()
         
@@ -80,5 +81,11 @@ class PhonebookDirectory():
             else:
                 temp[email] = dict(info.items())
                 temp[email].update({'mozillaMail':email})
-            
+        return temp
+
+    def get_people_by_name(self):
+        temp = {}
+        for name, info in self.people.items():
+            temp[info['name']] = dict(info.items())
+            temp[info['name']].update({'mozillaMail':info['bugzillaEmail']})
         return temp
