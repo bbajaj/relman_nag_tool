@@ -219,6 +219,8 @@ def nagEmailScript():
                         query : { 'bugs': [bug] },
                     }
                 print "Creating query key %s for bug %s in nagging and %s" % (query, bug.id, manager_email)
+        else :
+            print "Email not found in phonebook: ", manager_email
 
   
     verbose = False
@@ -270,10 +272,14 @@ def nagEmailScript():
                     owners_js = simplejson.loads(owners_js)
                     if ( owners_js.has_key(bug.component) ):
                         component_manager_name = owners_js[bug.component]
-                        component_manager = people.people_by_name[component_manager_name]
-                        if component_manager['bugzillaEmail'] != None:
-                            add_to_managers(component_manager['bugzillaEmail'], query)
-                        else:
+                        if people.people_by_name.has_key(component_manager_name) :
+                            component_manager = people.people_by_name[component_manager_name]
+                            if component_manager['bugzillaEmail'] != None:
+                                add_to_managers(component_manager['bugzillaEmail'], query)
+                            else:
+                                assignee = None
+                        else :
+                            print "Name not found in phonebook: ", component_manager_name 
                             assignee = None
                     else:
                         assignee = None
