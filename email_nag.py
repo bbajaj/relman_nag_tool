@@ -206,19 +206,20 @@ def nagEmailScript():
     counter = 0
     
     def add_to_managers(manager_email, query):
-        if managers[manager_email].has_key('nagging'):
-            if managers[manager_email]['nagging'].has_key(query):
-                managers[manager_email]['nagging'][query]['bugs'].append(bug)
-                print "Adding %s to %s in nagging for %s" % (bug.id, query, manager_email)
+        if managers.has_key(manager_email):
+            if managers[manager_email].has_key('nagging'):
+                if managers[manager_email]['nagging'].has_key(query):
+                    managers[manager_email]['nagging'][query]['bugs'].append(bug)
+                    print "Adding %s to %s in nagging for %s" % (bug.id, query, manager_email)
+                else:
+                    managers[manager_email]['nagging'][query] = { 'bugs': [bug] }
+                    print "Adding new query key %s for bug %s in nagging and %s" % (query, bug.id, manager_email)
             else:
-                managers[manager_email]['nagging'][query] = { 'bugs': [bug] }
-                print "Adding new query key %s for bug %s in nagging and %s" % (query, bug.id, manager_email)
-        else:
-            managers[manager_email]['nagging'] = {
-                    query : { 'bugs': [bug] },
-                }
-            print "Creating query key %s for bug %s in nagging and %s" % (query, bug.id, manager_email)
-    
+                managers[manager_email]['nagging'] = {
+                        query : { 'bugs': [bug] },
+                    }
+                print "Creating query key %s for bug %s in nagging and %s" % (query, bug.id, manager_email)
+
   
     verbose = False
     for query in collected_queries.keys():
@@ -255,13 +256,16 @@ def nagEmailScript():
                     while owners_js.find('//') > 0 or owners_js.find('/*') > 0 :
                         owners_js = re.sub('//.*?\n|/\*.*?\*/', '\n', owners_js, re.S)
                     
+                    #removing bracketed 2nds
+                    owners_js = re.sub('\s*?\(.*?\)\s*?', '', owners_js, re.S)
+                    
                     #removing trailing comma
                     owners_js = re.sub('{', '', owners_js)
                     owners_js = re.sub('}', '', owners_js)
                     owners_js = owners_js.strip(' \t\n\r')
                     owners_js = owners_js.strip(',')
                     owners_js = '{\n' + owners_js + '\n}'
-                    
+        
                     #search for email of the responsible component owner
                     owners_js = simplejson.loads(owners_js)
                     if ( owners_js.has_key(bug.component) ):
