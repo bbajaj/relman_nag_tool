@@ -104,11 +104,13 @@ def generateEmailOutput(people, queries, template, show_summary=False, show_comm
                 person = dict(people.people_by_bzmail[bug.assigned_to.name])
                 if person['mozillaMail'] not in toaddrs:
                     toaddrs.append(person['mozillaMail'])
-            
             elif people.people_by_bzmail.has_key(manager_email):
                 person = dict(people.people_by_bzmail[manager_email])
                 if person['mozillaMail'] not in toaddrs:
                     toaddrs.append(person['mozillaMail'])
+            else:
+                if manager_email not in toaddrs:
+                    toaddrs.append(manager_email)
     print 'To: ', toaddrs
     message_body = t.render(queries=template_params, show_summary=show_summary, show_comment=show_comment)
     # is our only email to a manager? then only cc the REPLY_TO_EMAIL
@@ -221,7 +223,8 @@ def nagEmailScript():
                 print "Creating query key %s for bug %s in nagging and %s" % (query, bug.id, manager_email)
         else :
             print "Email not found in phonebook: ", manager_email
-
+            managers[manager_email] = {}
+            add_to_managers(manager_email, query)
   
     verbose = False
     for query in collected_queries.keys():
@@ -259,7 +262,8 @@ def nagEmailScript():
                         owners_js = re.sub('//.*?\n|/\*.*?\*/', '\n', owners_js, re.S)
                     
                     #removing bracketed 2nds
-                    owners_js = re.sub('\s*?\(.*?\)\s*?', '', owners_js, re.S)
+                    while owners_js.find('(') > 0 or owners_js.find(')') > 0 :
+                        owners_js = re.sub('\s*?\(.*?\)\s*?', '', owners_js, re.S)
                     
                     #removing trailing comma
                     owners_js = re.sub('{', '', owners_js)
@@ -267,15 +271,15 @@ def nagEmailScript():
                     owners_js = owners_js.strip(' \t\n\r')
                     owners_js = owners_js.strip(',')
                     owners_js = '{\n' + owners_js + '\n}'
-        
+                    
                     #search for email of the responsible component owner
                     owners_js = simplejson.loads(owners_js)
                     if ( owners_js.has_key(bug.component) ):
                         component_manager_name = owners_js[bug.component]
                         if people.people_by_name.has_key(component_manager_name) :
                             component_manager = people.people_by_name[component_manager_name]
-                            if component_manager['bugzillaEmail'] != None:
-                                add_to_managers(component_manager['bugzillaEmail'], query)
+                            if component_manager['mozillaMail'] != None:
+                                add_to_managers(component_manager['mozillaMail'], query)
                             else:
                                 assignee = None
                         else :

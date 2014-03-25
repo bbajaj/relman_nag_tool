@@ -85,7 +85,8 @@ class PhonebookDirectory():
 
     def get_people_by_name(self):
         temp = {}
-        for name, info in self.people.items():
-            temp[info['name']] = dict(info.items())
-            temp[info['name']].update({'mozillaMail':info['bugzillaEmail']})
+        for email, info in self.people.items():
+            if info.get('name'):
+                temp[info['name']] = dict(info.items())
+                temp[info['name']].update({'mozillaMail':email})
         return temp
