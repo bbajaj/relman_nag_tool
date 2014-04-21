@@ -18,13 +18,23 @@
 		<div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                     <a class="navbar-brand" href="/">
                     	Email Nagger
                     </a>
-                </div>          
+                </div>
+                <div class="navbar-collapse collapse">
+                    <div class="navbar-form navbar-right">
+                        {% block logout %}{% endblock %}
+                    </div>
+                </div><!--/.navbar-collapse -->
             </div>
         </div>
-        <div class="container">
+		<div class="container">
 			{% block body %}{% endblock %}
 		</div>
 	</body>

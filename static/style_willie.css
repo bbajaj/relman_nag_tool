@@ -1,10 +1,6 @@
 /****** Skin: ******/
-
-
-
 body {
 	background: url("https://www.mozilla.org/media/img/sandstone/bg-gradient-sand.png") repeat-x scroll 0px 0px, url("https://www.mozilla.org/media/img/sandstone/bg-sand.png") repeat scroll 0px 0px, none repeat scroll 0% 0% rgb(245, 241, 232);
-	font: 1em Arial, Helvetica, sans-serif;
 	font-size: 16px;
 	padding-top: 75px;
     padding-bottom: 20px;

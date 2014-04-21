@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 
-{% block body %}
-	
+{% block logout %}
 	{% if 'username' in session %}
-		<header>
-			<form action="{{url_for('index')}}" method="post">
-					Welcome back {{session['username']}}!
-					<input type="submit" name="logout" value="logout"/>
-			</form>
-		</header>
-		
+		<form action="{{url_for('index')}}" method="post">
+			<button class="btn btn-danger" type="submit" name="logout" value="logout">
+		        <i class="fa fa-sign-out fa-lg"></i> {{session['username']}}
+		    </button>
+		</form>
+	{% endif %}
+{% endblock %}
+
+{% block body %}
+	{% if 'username' in session %}
 		<form name="template" action="{{url_for('show_templates')}}" method="post">
 			
 		<div class="wrapper">	
