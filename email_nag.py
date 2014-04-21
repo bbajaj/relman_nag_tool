@@ -72,7 +72,7 @@ def query_url_to_urlencoded(url):
         if key != "list_id":
             #d[key]=urllib.unquote(val)
             d.append((key, urllib.unquote(val)))
-    print "dict ", d
+    #print "dict ", d
     return urllib.urlencode(tuple(d))
 
 def generateEmailOutput(people, queries, template, show_summary=False, show_comment=False, manager_email=None, 
@@ -159,25 +159,21 @@ def sendMail(msg):
 def nagEmailScript():
     print "*******In nagEmailScript"
     email_cc_list=['release-mgmt@mozilla.com']
-    print "*******In nagEmailScript2"
+    
     # Load our agent for BMO
     username = flask.session['username']
-    print "*******In nagEmailScript", username
     password = flask.session['password']
-    print "*******In nagEmailScript", password
-    print "\n\nbefore bmo"
     
     bmo = BMOAgent(username, password)
     bmo.check_login("https://bugzilla.mozilla.org/show_bug.cgi?id=12");
     people = phonebook.PhonebookDirectory(flask.session['username'],flask.session['password']);
     queries = flask.session['queries'] 
-    print "\n\nafter BMO"
+    
     # Get the buglist(s)
     collected_queries = {}
-    print queries
+    
     for query in queries:
     # import the query
-        print "*****",query
         query_name = query['query_name']
         print "\nquery_name\n",query_name
         print "\nquery_channel\n",query['query_channel']
@@ -192,11 +188,9 @@ def nagEmailScript():
         elif query.has_key('query_url'):
             print "Gathering bugs from query_url in %s" % query
             collected_queries[query_name]['bugs'] = bmo.get_bug_list(query_url_to_urlencoded(query['query_url']))
-            print "gathered$$$$$$$$$$$"
         else:
             raise Exception("Error - no valid query params or url in the config file")
             
-    print "After collected queries",   collected_queries  
     total_bugs = 0
     for channel in collected_queries.keys():
         total_bugs += len(collected_queries[channel]['bugs'])
