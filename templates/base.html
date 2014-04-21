@@ -29,7 +29,13 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <div class="navbar-form navbar-right">
-                        {% block logout %}{% endblock %}
+                        {% if 'username' in session %}
+                            <form action="{{url_for('index')}}" method="post">
+                                <button class="btn btn-danger" type="submit" name="logout" value="logout">
+                                    <i class="fa fa-sign-out fa-lg"></i> {{session['username']}}
+                                </button>
+                            </form>
+                        {% endif %}
                     </div>
                 </div><!--/.navbar-collapse -->
             </div>

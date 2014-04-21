@@ -13,58 +13,75 @@
 {% block body %}
 	{% if 'username' in session %}
 		<form name="template" action="{{url_for('show_templates')}}" method="post">
+			<div class="well">	
+				<table class="table table-hover" id="template_list">
+                    <thead>
+                        <tr>
+	                        <th width="5%">
+								<input id="checkAllTemplates" onclick="toggleTemplateCheckBoxes(this)" type="CHECKBOX">
+							</th> 
+							<th width="95%">
+								Template Name
+							</th> 
+						</tr>
+                    </thead>
+					<tbody>
+						{% for template in list_templates %}
+							<tr>
+								<td width="5%">
+									<input value={{ template.template_id }} type="CHECKBOX" name="template_id" >
+								</td>
+								<td width="95%">
+									{{ template.template_title }}
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td></td>
+								<td>
+									Unbelievable. No templates here so far
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 			
-		<div class="wrapper">	
-			<table id="template_list" rules="rows" border="1" width="400" >
-			<tbody>
-				<tr class="title">
-					<th width="5%"><input id="checkAllTemplates" onclick="toggleTemplateCheckBoxes(this)" type="CHECKBOX"></th> 
-					<th width="95%" align="left">Template Name</th> 
-					{% for template in list_templates %}
-					</tr><tr>
-					<td width="5%"><input value={{ template.template_id }} type="CHECKBOX" name="template_id" ></td>
-					<td width="95%">{{ template.template_title }}</td>
-					{% else %}
-					<tr>Unbelievable. No templates here so far</tr>
-					{% endfor %}
-				</tr>
-			</tbody>
-			</table>
-		</div>
-	
-		<ul class="actions">
-			<li>
-				<input type="button" name="use_template" onclick="validateUse('use_template')" value="Use"/>
-			</li>
-			<li>
-				<input type="button" name="delete_template" onclick="validateDelete('delete_template')" value="Delete"/>
-			</li>
-			<li>
-				<input type="button" name="edit_template" onclick="validateEdit('edit_template')" value="Edit"/>
-			</li>
-			<li>
-				<input type="submit" name="create_template" value="Create New Template"/>
-			</li>
-			<li>
+			<div class="btn-group">
+				<button type="button" class="btn btn-default" name="use_template" onclick="validateUse('use_template')">
+					Use
+				</button>
+				<button type="button" class="btn btn-default" name="delete_template" onclick="validateDelete('delete_template')">
+					Delete
+				</button>
+				<button type="button" class="btn btn-default" name="edit_template" onclick="validateEdit('edit_template')">
+					Edit
+				</button>
 				<input type="hidden" id="buttonclicked" name="buttonclicked">
-			</li>
-			
-		</ul>
-		
+				<button type="submit" class="btn btn-default" name="create_template" value="Create New Template">
+					Create New Template
+				</button>
+			</div>
+		</form>
 	{% else %}
-	<p>A login is required:</p>
+
+	<p>
+		A login is required:
+	</p>
 	<form action="{{url_for('index')}}" method="post">
 		<p>Username:<br />
 		<input type="text" name="username" /></p>
 		<p>Password:<br />
 		<input type="password" name="passwd" /></p>
-		<p><input type="submit" value="submit" /></p>
+		<p>
+			<input class="btn" type="submit" value="submit" />
+		</p>
 	</form>
 	{% endif %}
 	
-		{% with messages = get_flashed_messages() %}
-					{% for message in messages %}
-								{{message}}
-					{% endfor %}
-		{% endwith %}
+	{% with messages = get_flashed_messages() %}
+		{% for message in messages %}
+			{{message}}
+		{% endfor %}
+	{% endwith %}
 {% endblock %}
