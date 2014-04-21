@@ -1,19 +1,34 @@
 <!DOCTYPE html>
 <html>
-	<script src="static/client_validation.js"></script>
-	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-
 	<head>
-		<title>Email Nagger</title>
-		
-		
-
-		
-	</head>
+		<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link rel="shortcut icon" href="" type="image/x-icon">
+        <link rel="icon" href="" type="image/x-icon">
+        <title>Email Nagger</title>
+		<meta name="description" content="Email nagging tool by Release Management at Mozilla">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans&subset=latin,latin-ext,cyrillic,cyrillic-ext">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_willie.css') }}">
+    </head>
 	<body>
-		
-		
+		<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                    	Email Nagger
+                    </a>
+                </div>          
+            </div>
+        </div>
+        <div class="container">
 			{% block body %}{% endblock %}
-		
+		</div>
 	</body>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="static/client_validation.js"></script>
 </html>
