@@ -3,14 +3,32 @@
   {% if 'username' in session %}
     <form action="{{ url_for('create_query') }}" method=post>
       <dl>
-        <dt>Query Name:
-        <dd><input type=text size=30 name=query_name>
-        <dt>Query Channel:
-        <dd><input type=text size=30 name=query_channel>
-        <dt>Query URL:
-        <dd><textarea name=query_url rows=5 cols=50></textarea>
+        <dt>
+          Query Name:
+        </dt>
+        <dd>
+          <input class="form-control" type=text name=query_name>
+        </dd>
+
+        <dt>
+          Query Channel:
+        </dt>
+        <dd>
+          <input class="form-control" type=text name=query_channel>
+        </dd>
+
+        <dt>
+          Query URL:
+        </dt>
+        <dd><textarea class="form-control" name=query_url rows=5></textarea>
           <br>
-        <dd><input type=submit value=Save>
+        </dd>
+
+        <dd>
+          <button class="btn btn-success" type="submit">
+            <i class="fa fa-save"></i> Save
+          </button>
+        </dd>
       </dl>
     </form>
   {% endif %}

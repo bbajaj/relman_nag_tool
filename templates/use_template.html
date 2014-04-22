@@ -1,27 +1,23 @@
 {% extends "base.html" %}
 {% block body %}
-    <div class="wrapper use-template">
-  <form action="{{url_for('use_template')}}" method="post" >
-  <ul class="list_templates">
-  {% for template in selected_template %}
-      <p> <h3> Template Title :
-        {{ template.template_title }} </p> </h3>
-    
-        <h3>Template Body </h3>
-         <textarea name=template_body rows=15 cols=60>
-                 {{ template.template_body|safe }}
-        </textarea>
-            <ul class="actions use-template">
-                <li>
-                <p><input type=submit value=Next name="Next"></p>
-                </li>
-            </ul>
-   
-  </form>
-  {% else %}
-    <li><em>Unbelievable.No templates here so far</em>
-  {% endfor %}
-  </ul>
+  <div class="use-template">
+    {% for template in selected_template %}
+      <form action="{{url_for('use_template')}}" method="post">
+        <h3>Template Title: {{ template.template_title }}</h3>
+        
+        <h3>Template Body: </h3>
+        <textarea class="form-control" name=template_body rows=15>{{ template.template_body|safe }}</textarea>
+
+        <br>
+        
+        <button class="btn btn-default" type=submit name="Next">
+          Next <i class="fa fa-forward"></i>
+        </button>
+
+      </form>
+    {% else %}
+      <em>Unbelievable.No templates here so far</em>
+    {% endfor %}
   </div>
 {% endblock %}
 

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block body %}   
-      <ul class= msg >
-        <h2>Please notify the below bugs manually</h2>
-        <textarea name= msg rows=15 cols=55>
-          {{ last_msg}}
-        </textarea>  
+  <ul class= msg >
+    <h3>Please notify the below bugs manually</h3>
+    <div class="well">
+        {{last_msg}}
+    </div>
   </ul>
 {% endblock %}
 

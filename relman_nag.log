@@ -8,3 +8,17 @@
 2014-03-22 03:35:59,886-DEBUG-get: DEBUG: Template id: 2
 2014-03-24 11:27:17,349-DEBUG-get: DEBUG: Template id: 2
 2014-03-25 15:05:44,785-DEBUG-get: DEBUG: Template id: 2
+2014-04-21 11:46:41,792-DEBUG-get: DEBUG: In Delete_Template and template_id_list: [u'2']
+2014-04-21 12:17:45,207-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 12:24:00,771-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 12:24:48,212-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 12:25:11,398-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 13:06:37,967-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 13:07:26,830-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 13:19:05,704-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 13:21:51,391-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 13:53:32,715-DEBUG-get: DEBUG: Template id: 3
+2014-04-21 14:00:41,245-DEBUG-get: DEBUG: Template id: 4
+2014-04-21 14:16:38,445-DEBUG-get: DEBUG: Template id: 4
+2014-04-21 14:17:01,827-DEBUG-get: DEBUG: Template id: 4
+2014-04-21 14:24:47,080-DEBUG-get: DEBUG: Template id: 4

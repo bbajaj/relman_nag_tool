@@ -1,32 +1,29 @@
 {% extends "base.html" %}
+
 {% block body %}
-  <div class="wrapper use-template">
-    <form action="{{ url_for('edit_template') }}" method=post>
-      <ul class= selected_template>
-      {% for template in selected_template %}
-      <p> <h2> Template Title: </h2>
-      <input type=text name=template_title size=30 value = "{{ template.template_title }}">
-         </p> 
-    
+  <div class="use-template">
+    {% for template in selected_template %}
+      <form action="{{ url_for('edit_template') }}" method=post>  
+      
+        <h2>Template Title:</h2>
+        <input class="form-control" type=text name=template_title value="{{ template.template_title }}">
+        
         <h2>Body:</h2>
-        <textarea name=template_body rows=10 cols=55>
-        {{ template.template_body|safe }}
-        </textarea>
-        <ul class="actions use-template">
-                <li>
-                    <input type="hidden" value={{ template.template_id }}  name="template_id">
-                </li>
-                <li>
-                   <p><input type=submit value=Save name="Save"></p>
-                </li>
-        </ul>
-                  
-                  
-  </form>
-  {% else %}
-    <li><em>Unbelievable. No templates here so far</em>
-  {% endfor %}
-  </ul>
+        <textarea class="form-control" name=template_body rows=10>{{ template.template_body|safe }}</textarea>
+        
+        <input type="hidden" value={{ template.template_id }}  name="template_id">
+        <br>
+
+        <button class="btn btn-success" type=submit name="Save">
+          <i class="fa fa-save"></i> Save
+        </button>
+      
+      </form>
+    {% else %}
+      <em>
+        Unbelievable. No templates here so far
+      </em>
+    {% endfor %}
   </div>
 {% endblock %}
 

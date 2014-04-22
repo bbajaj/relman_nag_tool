@@ -1,23 +1,33 @@
 {% extends "base.html" %}
 {% block body %}
-    <form action="{{ url_for('show_message') }}" method=post>
-      <ul class= send_msg >
-        <h2>Select checkbox to send Email </h2>
-        <table border="1">
-          <th>Send ? </th>
-          <th>Message</th>
+  <h3>Select checkbox to send Email </h3>
+  <form action="{{ url_for('show_message') }}" method=post>
+    <table class="table">
+      <thead>
+        <th>Send?</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
         {% for msg in send_msg %}
-        <tr>
-          <td width="5%" align="left"><input value={{loop.index}} type="CHECKBOX" name="messageid" ></td>
-        <td width="95%"><textarea name= {{loop.index}} rows=25 cols=180>{{msg}}</textarea>
-        </td></tr>
-      {% endfor %}
-      </table>
-        <textarea name="manual_notify" style="display:none;">{{manual_notify}}</textarea>
-          
-  <p><input type=submit value=Send name="Send"></p>
-  </ul>
-    </form>
+          <tr>
+            <td width="5%" align="left">
+              <input value={{loop.index}} type="CHECKBOX" name="messageid" >
+            </td>
+            <td width="95%">
+              <textarea class="form-control" name= {{loop.index}} rows=25>{{msg}}</textarea>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <textarea name="manual_notify" style="display:none;">{{manual_notify}}</textarea>
+    
+    <br>
+
+    <button class="btn btn-success" name="Send" type="submit">
+      Send
+    </button>
+  </form>
 {% endblock %}
 
 

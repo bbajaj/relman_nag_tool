@@ -2,47 +2,54 @@
 
 {% block body %}
 	{% if 'username' in session %}
-		<header>
-			<form action="{{url_for('index')}}" method="post">
-				Welcome back {{session['username']}}!
-				<input type="submit" name="logout" value="logout"/>
-			</form>
-		</header>	
-			
 		<form name="query" action="{{url_for('show_queries')}}" method="post">
-		
-		<div class="wrapper">
-			<table id="query_list" rules="rows" border="1" width="400">
-				<tbody>
-					<tr class="title">
-						<th width="5%"><input id="checkAllQueries" onclick="toggleQueryCheckBoxes(this)" type="CHECKBOX"></th> 
-						<th width="95%" align="left">Query Name</th>
+			<div class="well">
+				<table class="table table-hover" id="query_list">
+					<thead>
+                        <tr>
+	                        <th width="5%">
+								<input id="checkAllQueries" onclick="toggleQueryCheckBoxes(this)" type="CHECKBOX">
+							</th> 
+							<th width="95%">
+								Query Name
+							</th> 
+						</tr>
+                    </thead>
+					<tbody>
 						{% for query in queries %}
-						</tr><tr>
-						<td width="5%"><input value={{ query.query_id }} type="CHECKBOX" name="query_id"></td>
-						<td width="95%">{{ query.query_name }}</td>
+							<tr>
+								<td width="5%">
+									<input value={{ query.query_id }} type="CHECKBOX" name="query_id">
+								</td>
+								<td width="95%">
+									{{ query.query_name }}
+								</td>
+							</tr>
 						{% else %}
-						</tr><td width="100%">Unbelievable.  No queries here so far</td>
+							<tr>
+								<td></td>
+								<td>
+									Unbelievable.  No queries here so far
+								</td>
+							</tr>
 						{% endfor %}
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		
-		<ul class="actions">
-			<li>
-				<input type="button" name="use_query" onclick="validateUseQuery('use_query')" value="Use"/>
-			</li>
-			<li>
-				<input type="button" name="delete_query" onclick="validateDeleteQuery('delete_query')" value="Delete"/>
-			</li>
-			<li>
-				<input type="submit" name="create_query" value="Create New Query"/>
-			</li>
-			<li>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="btn-group">
+				<button type="button" class="btn btn-default" name="use_query" onclick="validateUseQuery('use_query')">
+					Use
+				</button>
+				<button type="button" class="btn btn-default" name="delete_query" onclick="validateDeleteQuery('delete_query')">
+					Delete
+				</button>
 				<input type="hidden" id="querybuttonclicked" name="querybuttonclicked">
-			</li>
-		</ul>
+				<button type="submit" class="btn btn-default" name="create_query" value="Create New Query">
+					Create New Query
+				</button>
+			</div>
+		</form>
 	{% else %}
 		<p>A login is required:</p>
 		<form action="{{url_for('index')}}" method="post">
@@ -53,11 +60,10 @@
 			<p><input type="submit" value="submit" /></p>
 		</form>
 	{% endif %}
-		{% with messages = get_flashed_messages() %}
-					{% for message in messages %}
-								{{message}}
-					{% endfor %}
-		{% endwith %}
-		
-
+	
+	{% with messages = get_flashed_messages() %}
+		{% for message in messages %}
+			{{message}}
+		{% endfor %}
+	{% endwith %}
 {% endblock %}
